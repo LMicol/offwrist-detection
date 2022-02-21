@@ -10,7 +10,7 @@ The real label is presented on column "NA2":
 
 ## Requriments
 You need to install Python 3.8+ to run this code.
-Check if python is installed by using the following command:
+Check if Python is installed by using the following command:
 ```Shell
 > python --version
 ```
@@ -24,6 +24,8 @@ In the folder of this project, run the following command:
 ```Shell
 > pip install -r requirements.txt
 ```
+
+## Running the code
 
 You can run the program with the following command:
 ```Shell

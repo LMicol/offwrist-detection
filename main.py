@@ -72,7 +72,7 @@ def main():
         ############################################################
         
         # time to compute print
-        print(time.time() - start_time)
+        print("time to compute (in seconds): " + str(time.time() - start_time))
         
         # This last part saves the dataset on your local execution folder
         prediction = pd.DataFrame({'ML_OffWrist_Prediction':prediction})
