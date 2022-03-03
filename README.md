@@ -42,6 +42,14 @@ Output example:
 | ........ | 28/09/2020 00:02 |    1    |   NA  |           1             |
 
 
+## Datasets
+
+The data is divided in two directories:
+- [./data/](https://github.com/LMicol/offwrist-detection/tree/main/data) : off-wrist periods smaller than 30 minutes were cleaned
+- [./data_raw/](https://github.com/LMicol/offwrist-detection/tree/main/data_raw) : raw data from the actigraphs. The column "NA2" is the user record for off-wrist
+
+We used the ./data/ directory for training and testing. However, the original data is also available.
+
 ### Try the code using our examples in ./data/
 ```Shell
 > python main.py "data/01.xlsx"
