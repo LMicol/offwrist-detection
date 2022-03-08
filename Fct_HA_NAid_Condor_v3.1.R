@@ -1,5 +1,4 @@
 # Function to detect off-wrist in database (LKPilz, 2020-2021)
-# HA algorithm from Pilz et al 2022
 # IMPORTANT: coded considering resolution of 1 min, file from Condor
 #            please note that this algorithm was run with the raw actimetry dataset in our paper
 
