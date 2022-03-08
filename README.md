@@ -6,9 +6,9 @@ You can test the program with the actigraphy series inside ./data/ directory.
 The real label is presented on column "NA2":
 - `0`: Wearing
 
-- `1`: Not-wearing
+- `1`: Not wearing
 
-## Requriments
+## Requirements
 You need to install Python 3.8+ to run this code.
 Check if Python is installed by using the following command:
 ```Shell
@@ -44,13 +44,19 @@ Output example:
 
 ## Datasets
 
-The data is divided in two directories:
-- [./data/](https://github.com/LMicol/offwrist-detection/tree/main/data) : off-wrist periods smaller than 30 minutes were cleaned
-- [./data_raw/](https://github.com/LMicol/offwrist-detection/tree/main/data_raw) : raw data from the actigraphs. The column "NA2" is the user record for off-wrist
+The data are divided in three directories:
+- [./data_train/](https://github.com/LMicol/offwrist-detection/tree/main/data_train) : off-wrist periods shorter than 30 minutes were considered wear for training purposes (true label = "NA2" column).
+- [./data_raw/](https://github.com/LMicol/offwrist-detection/tree/main/data_raw) : raw data from the actimeters - HA was run on those in our publication.
+- [./data_test/](https://github.com/LMicol/offwrist-detection/tree/main/data_test): The column "NA2" is the user record for off-wrist (with intervals <30min included; true label). The results of both ML and HA performances reported in our publication were computed using this.
 
-We used the ./data/ directory for training and testing. However, the original data is also available.
+Data from our validation (proof-of-concept) cannot be made available, but results are described in the publication.
 
 ### Try the code using our examples in ./data/
 ```Shell
 > python main.py "data/01.xlsx"
 ```
+
+
+## HA function
+
+You can also find the HA function as described in our publication [here](https://github.com/LMicol/offwrist-detection/blob/main/Fct_HA_NAid_Condor_v3.1.R).
