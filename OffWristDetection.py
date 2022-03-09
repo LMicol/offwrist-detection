@@ -22,17 +22,20 @@ Note that this detector only recognizes offwrtist periods longer than 30 minutes
 
 #from sklearn.ensemble import RandomForestClassifier
 import pickle as pkl
-
+import numpy as np
 
 def Offwrist_filter(data):
     count = 0
+    output = data.copy()
+
     for i in range(len(data)):
         if (data[i] == 1):
             count += 1
         else :
             if(count < 30):
-                data[i-count:i] = 0
-    return data
+                output[i-count:i] = 0
+            count = 0
+    return output
     
 
 class OffWristEstimator:
@@ -43,4 +46,3 @@ class OffWristEstimator:
 
     def predict(self, data):
         return Offwrist_filter(self.estimator.predict(data))
-        
