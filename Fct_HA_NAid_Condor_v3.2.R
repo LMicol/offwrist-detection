@@ -4,7 +4,9 @@
 
 # V3.0: updates (05-06/12/2020 filter 1 and 2)
 # V3.1: updates filter 1 - 230 instead of 225 
-
+# V3.2: important fix in filter 2 (09/11/2022): 
+#       to avoid NAs in NAid for those who don't have NAidFs
+#       addition (line 201): data$NAidF <- ifelse(is.na(data$NAidF), 0, data$NAidF) 
 
 
 ### Cleaning (detecting offwrist) Condor actigraphy data based on:
@@ -68,7 +70,6 @@ idNA <- function(data, filterBet = F, filterAround = F, filterBetType = 1) {
   
   data <- data %>%
     mutate(Temp_roll_sum = roll_sum(TempDiffBin, 60, align = "center", fill = NA))
-  hist(data$Temp_roll_sum, breaks = 60)
   
   data$Temp_roll_sum <- ifelse(is.na(data$Temp_roll_sum), 0, data$Temp_roll_sum)
   
@@ -197,7 +198,8 @@ idNA <- function(data, filterBet = F, filterAround = F, filterBetType = 1) {
     NAidF <- NAidF[1:nrow(data)]
     
     data <- cbind(data,NAidF)
-    
+    data$NAidF <- ifelse(is.na(data$NAidF), 0, data$NAidF)
+
     data$NAid <- ifelse(data$NAid == 1, 1,
                         ifelse(data$NAid == 0 & data$NAidF == 1 & data$roll_sum_NAzero > 80 & data$roll_sum_4 > 200 & !is.na(data$roll_sum_4), 1, 0)) }
   
