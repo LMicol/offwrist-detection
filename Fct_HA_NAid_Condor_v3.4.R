@@ -7,6 +7,9 @@
 # V3.2: important fix in filter 2 (09/11/2022): 
 #       to avoid NAs in NAid for those who don't have NAidFs
 #       addition (line 201): data$NAidF <- ifelse(is.na(data$NAidF), 0, data$NAidF) 
+# V3.3: option to not use filterDay
+# v3.4: fix in filterDay so that first day is also detected as missing if mean activity <100, 
+#       day-windows assigned NAid = 1 had start corrected to 1 min later 
 
 
 ### Cleaning (detecting offwrist) Condor actigraphy data based on:
@@ -41,6 +44,7 @@
 ### 2) filterBet = filter 4 on?                       *DEFAULT == F 
 ### 3) filterAround = filter 2 on?                    *DEFAULT == F
 ### 4) filterBetType = filter 4 type (see above)      *DEFAULT == 1
+### 5) filterDay = filter 3 on?                       *DEFAULT == T
 
 ### note: filters 2 and 4 are the ones of highest complexity
 
@@ -53,7 +57,8 @@ library(dplyr)
 
 # Function:
 
-idNA <- function(data, filterBet = F, filterAround = F, filterBetType = 1) {
+idNA <- function(data, filterBet = F, filterAround = F, 
+                 filterBetType = 1, filterDay = T) {
   
   #remove empty rows 
   data <- data[rowSums(is.na(data)) != ncol(data),]
@@ -202,18 +207,19 @@ idNA <- function(data, filterBet = F, filterAround = F, filterBetType = 1) {
 
     data$NAid <- ifelse(data$NAid == 1, 1,
                         ifelse(data$NAid == 0 & data$NAidF == 1 & data$roll_sum_NAzero > 80 & data$roll_sum_4 > 200 & !is.na(data$roll_sum_4), 1, 0)) }
-  
+ 
+if(filterDay == T)  {
   # 6) FILTER 3: if day only has missing and some noise, detect as missing  ----
   # detect average activity of that day, if mean < 100, set all to 1
   
-  for(i in 1:(nrow(data)/1440)) {
-    i <- (i*1440)-1440
+  for(i in 1:(nrow(data)/1440)) { 
+    i <- (i*1440)-1439 # 1440 into 1439 on v3.4 (29/07/2023)
     day <- data$PIM[i:(i+1439)]
     value <- mean(day, na.rm = T)
     if(value < 100 | is.na(value)) {data$NAid[i:(i+1439)] <- rep(1, 1440)} else {
       data$NAid[i:(i+1439)] <- data$NAid[i:(i+1439)] }
   }
-  
+}
   # 7) FILTER 4: fill short intervals (<240min) in between long NA chunks (>60 min) or <20% of NA chunks or intervals of <10min in between NA chunks: ----
   
   if(filterBet == T) {
@@ -278,29 +284,7 @@ idNA <- function(data, filterBet = F, filterAround = F, filterBetType = 1) {
 
   if(filterAround == T) {
     data <-  dplyr::select(data, -NAidF)
-                  }
+  }
 
   return(data)
 }
-
-
-# # Don't run - tests:
-#
-# NA01 <- read.csv("data_acti_raw/NA01.txt", sep = ";", skip = 21)
-# NA01_clean <- idNA(NA01, filterBet = T, filterAround = T)
-# summary(factor(NA01_clean$NAid))
-
-# # test plot - for purposes of seeing the conditions 
-# # -- in order to use, comment out lines of code in which we get rid of unnecessary VARS (line 272 - 278)
-#
-# ggplot(NA01_clean, aes(y = TempDiff, x = seq(1, nrow(NA01_clean), 1))) +
-#   geom_line() +
-#   geom_line(aes(y = ((roll_sum_NAzero-min(roll_sum_NAzero))/(max(roll_sum_NAzero) - min(roll_sum_NAzero)))-1,  
-#                 x = seq(1, nrow(NA01_clean), 1)), color = "grey75") +
-#   theme_bw() +
-#   geom_point(aes(y = as.numeric(C1-1.01),x = seq(1, nrow(NA01_clean), 1)), color = "green") +
-#   geom_point(aes(y = as.numeric(C2-1.02),x = seq(1, nrow(NA01_clean), 1)), color = "red") +
-#   geom_point(aes(y = as.numeric(NAid-1.03),x = seq(1, nrow(NA01_clean), 1)), color = "yellow") +
-#   geom_hline(yintercept = c(-0.1, 0.1), color = "red") +
-#   scale_y_continuous(limits = c(-.5,.5), breaks = seq(-1,1,0.1)) + # some data will be flagged as missing, but it is just the unmarked conditions and very low TempDiff values - comment this out to see
-#   scale_x_continuous(breaks = seq(0, nrow(NA01_clean), 1440), labels = seq(0, nrow(NA01_clean)/1440, 1))
