@@ -47,7 +47,7 @@ Output example:
 The data are divided in three directories:
 - [./data_train/](https://github.com/LMicol/offwrist-detection/tree/main/data_train) : off-wrist periods shorter than 30 minutes were considered wear for training purposes (true label = "NA2" column).
 - [./data_raw/](https://github.com/LMicol/offwrist-detection/tree/main/data_raw) : raw data from the actimeters - HA was run on those in our publication.
-- [./data_test/](https://github.com/LMicol/offwrist-detection/tree/main/data_test): The column "NA2" is the user record for off-wrist (with intervals <30min included; true label). The results of both ML and HA performances reported in our publication were computed using this.
+- [./data_test/](https://github.com/LMicol/offwrist-detection/tree/main/data_test): The column "NA2" is the user record for off-wrist (with intervals <30min included; true label). The results of all performances reported in our publication were computed using this. All algorithms except HA were run in these data.
 
 Data from our validation (proof-of-concept) cannot be made available, but results are described in the publication.
 
@@ -59,4 +59,6 @@ Data from our validation (proof-of-concept) cannot be made available, but result
 
 ## HA function
 
-You can also find the HA function as described in our publication [here](https://github.com/LMicol/offwrist-detection/blob/main/Fct_HA_NAid_Condor_v3.1.R).
+You can also find the HA function [here](https://github.com/LMicol/offwrist-detection/blob/main/Fct_HA_NAid_Condor_v3.4.R). 
+
+**We used v3.1 in the publication analyses, but no important change in results is seen with fixes/edits.*
