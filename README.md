@@ -61,4 +61,4 @@ Data from our validation (proof-of-concept) cannot be made available, but result
 
 You can also find the HA function [here](https://github.com/LMicol/offwrist-detection/blob/main/Fct_HA_NAid_Condor_v3.4.R). 
 
-**We used v3.1 in the publication analyses, but no important change in results is seen with fixes/edits.*
+**We used v3.1 (filterAround = T, filterBet = T) in the publication analyses, but no important change in results is seen with fixes/edits.*
